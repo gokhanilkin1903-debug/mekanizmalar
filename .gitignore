@@ -1,0 +1,11 @@
+node_modules/
+cikti/
+full/
+prev/
+logs/
+*.log
+__pycache__/
+seslendirme/ep*_*/
+seslendirme/ep*_*.json
+seslendirme/log_*.txt
+.env

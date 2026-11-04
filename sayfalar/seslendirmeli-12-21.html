@@ -1,0 +1,153 @@
+<title>Mekanizma Serisi 12–21</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@500&display=swap">
+<style>
+/* Layout: blueprint sheet — a short title block, then a parts-catalogue grid of episode cards */
+:root {
+  --bg: #eef2f7; --sheet: #ffffff; --ink: #142033; --muted: #5a6b84; --line: #cdd6e3;
+  --accent: #c98a12; --accent-ink: #1a1203; --blue: #3f6fd1; --grid: rgba(63,111,209,.07);
+  --f-display: "Barlow Condensed", "Arial Narrow", sans-serif;
+  --f-body: "IBM Plex Sans", system-ui, sans-serif;
+  --f-mono: "IBM Plex Mono", ui-monospace, monospace;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  --bg: #0c1424; --sheet: #121d33; --ink: #e8eef8; --muted: #93a4c0; --line: #24334f;
+  --accent: #ffc94d; --accent-ink: #1a1203; --blue: #7fb0ff; --grid: rgba(127,176,255,.06); color-scheme: dark } }
+:root[data-theme="dark"] {
+  --bg: #0c1424; --sheet: #121d33; --ink: #e8eef8; --muted: #93a4c0; --line: #24334f;
+  --accent: #ffc94d; --accent-ink: #1a1203; --blue: #7fb0ff; --grid: rgba(127,176,255,.06); color-scheme: dark }
+
+* { box-sizing: border-box; }
+body {
+  background: var(--bg); color: var(--ink); font-family: var(--f-body); font-size: 1rem; line-height: 1.5;
+  background-image: linear-gradient(var(--grid) 1px, transparent 1px), linear-gradient(90deg, var(--grid) 1px, transparent 1px);
+  background-size: 24px 24px;
+}
+.wrap { max-width: 1180px; margin: 0 auto; padding-block: 40px 64px;
+  padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+header { display: grid; gap: 10px; margin-bottom: 28px; }
+.eyebrow { font-family: var(--f-mono); font-size: .78rem; letter-spacing: .12em; text-transform: uppercase; color: var(--blue); }
+h1 { font-family: var(--f-display); font-weight: 700; font-size: clamp(2.6rem, 7vw, 4.2rem); line-height: .95; margin: 0; letter-spacing: -.01em; text-wrap: balance; }
+.lead { color: var(--muted); max-width: 62ch; margin: 0; }
+.specs { display: flex; flex-wrap: wrap; gap: 8px 18px; font-family: var(--f-mono); font-size: .8rem; color: var(--muted); margin-top: 4px; }
+.specs b { color: var(--ink); font-weight: 500; }
+.note { margin-top: 6px; font-size: .9rem; color: var(--muted); max-width: 70ch; }
+.note[data-state="off"] { color: var(--ink); }
+
+.grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 18px; }
+.card { background: var(--sheet); border: 1px solid var(--line); border-radius: 10px; overflow: hidden; display: grid; grid-template-rows: auto 1fr; min-width: 0; }
+.media { position: relative; aspect-ratio: 9 / 16; max-width: 100%; background: #070c16; }
+.media video { width: 100%; height: 100%; display: block; object-fit: cover; }
+.no { position: absolute; top: 10px; left: 10px; font-family: var(--f-mono); font-size: .75rem; padding: 3px 8px; border-radius: 4px; background: var(--accent); color: var(--accent-ink); pointer-events: none; }
+.body { padding: 14px 14px 16px; display: grid; gap: 10px; align-content: start; min-width: 0; }
+.name { font-family: var(--f-display); font-weight: 600; font-size: 1.45rem; line-height: 1.05; margin: 0; text-wrap: balance; }
+.en { font-size: .85rem; color: var(--muted); margin-top: 2px; }
+.row { display: flex; gap: 8px; flex-wrap: wrap; }
+.seg { display: inline-flex; border: 1px solid var(--line); border-radius: 6px; overflow: hidden; }
+.seg button { font: 500 .78rem var(--f-mono); padding: 6px 10px; border: 0; background: transparent; color: var(--muted); cursor: pointer; }
+.seg button[aria-pressed="true"] { background: var(--ink); color: var(--sheet); }
+.dl { flex: 1; min-width: 0; font: 600 .88rem var(--f-body); padding: 9px 10px; border-radius: 6px; border: 1px solid var(--accent); background: transparent; color: var(--ink); cursor: pointer; display: inline-flex; align-items: center; justify-content: center; gap: 6px; }
+.dl:hover { background: var(--accent); color: var(--accent-ink); }
+.dl:disabled { opacity: .55; cursor: progress; }
+.dl svg { width: 15px; height: 15px; flex: none; }
+button:focus-visible { outline: 2px solid var(--blue); outline-offset: 2px; }
+.status { font-size: .8rem; color: var(--muted); min-height: 1.2em; margin: 0; }
+footer { margin-top: 30px; font-size: .85rem; color: var(--muted); }
+@media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+</style>
+
+<div class="wrap">
+  <header>
+    <span class="eyebrow">Seslendirmeli · 12–21. bölümler · TR + EN</span>
+    <h1>Mekanizma Serisi<br>12–21</h1>
+    <p class="lead">Her bölüm tek bir mekanizmayı 31 saniyede anlatıyor: parçaları, hareketi, ağır çekim yakın planı ve nerede kullanıldığını. Dikey formatta; Shorts, Reels ve TikTok'a hazır.</p>
+    <div class="specs"><span><b>1080×1920</b> dikey</span><span><b>30</b> fps</span><span><b>H.264</b> MP4</span><span>anlatıcı sesi: <b>George</b> (ElevenLabs)</span></div>
+    <p class="note" id="note">İndir düğmesi her videoyu ayrı kaydeder. Telefonda paylaşım menüsü açılır; oradan Google Drive'ı seçerek doğrudan Drive'a kaydedebilirsiniz.</p>
+  </header>
+  <main class="grid" id="grid"></main>
+  <footer>Paylaşım metinleri ve etiketler Google Drive'daki "Mekanizma Serisi" klasöründe. 1–11. bölümler ayrı sayfada duruyor.</footer>
+</div>
+
+<script>
+const EPS = [
+  ["12", "Diferansiyel", "Differential"],
+  ["13", "Zincir ve dişli", "Chain and sprocket"],
+  ["14", "Wankel (döner) motor", "Wankel rotary engine"],
+  ["15", "Vidalı mil ve somun", "Lead screw and nut"],
+  ["16", "Dişli dizisi (27:1)", "Compound gear train"],
+  ["17", "Hızlı geri dönüş", "Quick-return mechanism"],
+  ["18", "Tusi çifti", "Tusi couple"],
+  ["19", "Oldham kavraması", "Oldham coupling"],
+  ["20", "Pantograf", "Pantograph"],
+  ["21", "Eğik plakalı pompa", "Swashplate pump"],
+];
+const ICON = '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><path d="M8 2v8m0 0L4.5 6.5M8 10l3.5-3.5M2.5 13.5h11"/></svg>';
+const grid = document.getElementById("grid");
+let downloads = null;
+
+for (const [n, tr, en] of EPS) {
+  const card = document.createElement("article");
+  card.className = "card";
+  card.innerHTML = `
+    <div class="media">
+      <video id="v${n}" controls playsinline preload="none" poster="p/${n}.jpg" src="v/mekanizma_${n}_tr.mp4"></video>
+      <span class="no">#${n}</span>
+    </div>
+    <div class="body">
+      <div><h2 class="name">${tr}</h2><div class="en">${en}</div></div>
+      <div class="row">
+        <div class="seg" role="group" aria-label="Önizleme dili">
+          <button type="button" id="tr${n}" aria-pressed="true">TR</button>
+          <button type="button" id="en${n}" aria-pressed="false">EN</button>
+        </div>
+      </div>
+      <div class="row">
+        <button class="dl" type="button" id="dtr${n}" data-file="mekanizma_${n}_tr.mp4" data-name="mekanizma_${n}_tr_seslendirmeli.mp4">${ICON}Türkçe</button>
+        <button class="dl" type="button" id="den${n}" data-file="mekanizma_${n}_en.mp4" data-name="mekanizma_${n}_en_seslendirmeli.mp4">${ICON}English</button>
+      </div>
+      <p class="status" id="s${n}" aria-live="polite"></p>
+    </div>`;
+  grid.appendChild(card);
+  const v = card.querySelector("video");
+  const setLang = (lang) => {
+    card.querySelector(`#tr${n}`).setAttribute("aria-pressed", lang === "tr");
+    card.querySelector(`#en${n}`).setAttribute("aria-pressed", lang === "en");
+    const playing = !v.paused;
+    v.src = `v/mekanizma_${n}_${lang}.mp4`;
+    if (playing) v.play().catch(() => {});
+  };
+  card.querySelector(`#tr${n}`).addEventListener("click", () => setLang("tr"));
+  card.querySelector(`#en${n}`).addEventListener("click", () => setLang("en"));
+  card.querySelectorAll(".dl").forEach((b) => b.addEventListener("click", () => save(b, card.querySelector(`#s${n}`))));
+}
+
+async function save(btn, status) {
+  if (!downloads) { status.textContent = "İndirme bu görünümde kullanılamıyor. Videoyu oynatıcının menüsünden kaydedin."; return; }
+  const file = btn.dataset.file;
+  btn.disabled = true; status.textContent = "Hazırlanıyor…";
+  try {
+    const res = await fetch("v/" + file);
+    if (!res.ok) throw { code: "fetch" };
+    const blob = await res.blob();
+    status.textContent = "Onayınız bekleniyor…";
+    await downloads.save({ filename: btn.dataset.name, data: blob });
+    status.textContent = "Kaydedildi: " + btn.dataset.name;
+  } catch (e) {
+    const c = e && e.code;
+    status.textContent = c === "declined" ? "İndirme iptal edildi."
+      : c === "rate_limited" ? "Başka bir indirme onay bekliyor. Biraz sonra tekrar deneyin."
+      : c === "fetch" ? "Video yüklenemedi. Sayfayı yenileyip tekrar deneyin."
+      : "İndirme bu görünümde kullanılamıyor.";
+  } finally { btn.disabled = false; }
+}
+
+(async () => {
+  try { downloads = await window.claude?.use?.("downloads"); } catch { downloads = null; }
+  if (!downloads) {
+    const note = document.getElementById("note");
+    note.dataset.state = "off";
+    note.textContent = "Bu görünümde indirme düğmeleri çalışmıyor. Videoyu oynatıp oynatıcı menüsünden kaydedebilir ya da sayfayı claude.ai'de açabilirsiniz.";
+  }
+})();
+</script>
