@@ -1,13 +1,15 @@
 // Anchor escapement with pendulum and weight drive
 import { THREE, TAU, ss, mod, extrude, capsuleShape, cylZ, cylY, setRod, phase, fmtN, TL } from '../engine.js';
-const NW = 30, PW = TAU / NW, WC = [0, 0.7], RW = 1.7, AP = [0, 3.1], AMP = 0.13, OM = Math.PI, PL = 6.0, DR = 0.45;
+const NW = 30, PW = TAU / NW, WC = [0, 0.7], RW = 1.7, AP = [0, 3.1], AMP = 0.13, OM = Math.PI, PL = 6.5, DR = 0.45;
+const PA = 6.5 * PW / 2; // pallets span 6.5 teeth -> alternate half-tooth locking
+const W0 = Math.PI / 2 - PA + 0.06 + PW / 2 + 0.0777 + 0.0459; // a tooth rests against the engaged pallet when locked
 const swing = ph => AMP * Math.sin(OM * ph);
-function wheelAngle(ph) { const s = OM * ph / Math.PI + 0.5, k = Math.floor(s), f = s - k; return -(PW / 2) * (k + ss((f - 0.3) / 0.4)); }
+function wheelAngle(ph) { const s = OM * ph / Math.PI + 0.5, k = Math.floor(s), f = s - k; return -(PW / 2) * (k + ss((f - 0.32) / 0.36)); }
 const halfSwings = ph => Math.floor(OM * ph / Math.PI + 0.5);
 let S = {};
 export default {
   id: '23',
-  view: { az: 0, el: 6, dist: 25, target: [0.2, 0.0, 0], orbit: 0.5, caz: -22, cel: 6, cdist: 10, ctarget: [0, 1.9, 0], low: 0.17, lowDist: 1.25 },
+  view: { az: 0, el: 6, dist: 25, target: [0.2, 0.0, 0], orbit: 0.5, caz: -8, cel: 6, cdist: 12, ctarget: [0, 1.8, 0], low: 0.17, lowDist: 1.25 },
   floorY: -5.4,
   text: {
     tr: { hook: 'Saatin tik-tak sesi<br>nereden gelir?', hookSub: 'Çapa eşapmanı', labels: ['Çapa', 'Eşapman çarkı', 'Sarkaç', 'Ağırlık'],
@@ -24,7 +26,7 @@ export default {
     { c: '#ff9d8a', mat: 'red', at: [830, 330], p: k => [1.2, AP[1] - 0.9, 0.4] },
     { c: '#ffcf5c', mat: 'gold', at: [250, 330], p: [-1.4, WC[1] + 0.6, 0.3] },
     { c: '#7fb0ff', mat: 'blue', at: [250, 1450], p: k => [AP[0] + (PL - 0.3) * Math.sin(k.phi), AP[1] - (PL - 0.3) * Math.cos(k.phi), 0.4] },
-    { c: '#c9d1dc', mat: 'steel', at: [830, 1450], p: k => [1.7, -0.6 + k.w * DR, 0.2] },
+    { c: '#c9d1dc', mat: 'steel', at: [830, 1450], p: k => [1.25, -0.6 + k.w * DR, 0.2] },
   ],
   counters: [
     { label: { tr: 'Salınım', en: 'Swings' }, c: '#7fb0ff', fn: t => String(halfSwings(phase(t)) - halfSwings(phase(Math.min(t, TL.cnt0)))) },
@@ -32,7 +34,7 @@ export default {
   ],
   overlay(t, k, ctx) {
     const s = OM * k.ph / Math.PI + 0.5, f = s - Math.floor(s), n = Math.floor(s);
-    if (f > 0.7 && f < 0.95) { const age = (f - 0.7) / 0.25, side = n % 2 ? 1 : -1; const [x, y] = ctx.project([side * 1.4, WC[1] + 1.9, 0.5]); ctx.extraDiv.innerHTML = `<div class="pop" style="left:${x - 40}px;top:${y - 60 - age * 60}px;opacity:${1 - age};transform:scale(${1 + age * 0.5})">${n % 2 ? ctx.T.tock : ctx.T.tick}</div>`; }
+    if (f > 0.7 && f < 0.95) { const age = (f - 0.7) / 0.25, side = n % 2 ? -1 : 1; const [x, y] = ctx.project([side * 1.15, WC[1] + 1.75, 0.5]); ctx.extraDiv.innerHTML = `<div class="pop" style="left:${x - 40}px;top:${y - 60 - age * 60}px;opacity:${1 - age};transform:scale(${1 + age * 0.5})">${n % 2 ? ctx.T.tock : ctx.T.tick}</div>`; }
     else ctx.extraDiv.innerHTML = '';
     return '';
   },
@@ -44,16 +46,17 @@ export default {
     pts.forEach(([x, y], i) => i ? ws.lineTo(x, y) : ws.moveTo(x, y)); ws.closePath();
     for (let i = 0; i < 5; i++) { const h = new THREE.Path(), a = i * TAU / 5; h.absarc(0.85 * Math.cos(a), 0.85 * Math.sin(a), 0.3, 0, TAU, true); ws.holes.push(h); }
     S.wheel = new THREE.Group(); S.wheel.position.set(WC[0], WC[1], 0); scene.add(S.wheel);
-    S.wheel.add(M(extrude(ws, 0.22, 0.01), mats.gold));
-    const drum = M(cylZ(1.35, 0.3), mats.bronze); drum.position.z = -0.35; S.wheel.add(drum);
+    S.wheelIn = new THREE.Group(); S.wheelIn.rotation.z = W0; S.wheel.add(S.wheelIn);
+    S.wheelIn.add(M(extrude(ws, 0.22, 0.01), mats.gold));
+    const drum = M(cylZ(0.9, 0.25), mats.dark); drum.position.z = -0.35; S.wheel.add(drum);
     const ax = M(cylZ(0.12, 1.6), mats.steel); S.wheel.add(ax);
     // anchor: pivot at AP, two arms reaching wheel at ±38deg from top
     S.anchor = new THREE.Group(); S.anchor.position.set(AP[0], AP[1], 0.3); scene.add(S.anchor);
     const tipA = a => [WC[0] + (RW + 0.02) * Math.sin(a) - AP[0], WC[1] + (RW + 0.02) * Math.cos(a) - AP[1]];
     for (const sgn of [-1, 1]) {
-      const tp = tipA(sgn * 0.68), arm = M(new THREE.BoxGeometry(1, 0.2, 0.18), mats.red);
+      const pa = sgn * PA + (sgn < 0 ? -0.0447 : 0), tp = tipA(pa), arm = M(new THREE.BoxGeometry(1, 0.2, 0.18), mats.red);
       arm.position.set(tp[0] / 2, tp[1] / 2 + 0.05, 0); arm.scale.x = Math.hypot(tp[0], tp[1]); arm.rotation.z = Math.atan2(tp[1], tp[0]); S.anchor.add(arm);
-      const pal = M(new THREE.BoxGeometry(0.16, 0.42, 0.24), new THREE.MeshStandardMaterial({ color: 0xff3b6b, roughness: 0.2, metalness: 0.1 })); pal.position.set(tp[0], tp[1] + 0.12, 0); pal.rotation.z = sgn * 0.68; S.anchor.add(pal);
+      const pal = M(new THREE.BoxGeometry(0.16, 0.42, 0.24), new THREE.MeshStandardMaterial({ color: 0xff3b6b, roughness: 0.2, metalness: 0.1 })); pal.position.set(tp[0], tp[1] + 0.12, 0); pal.rotation.z = -pa; S.anchor.add(pal);
     }
     const hubA = M(cylZ(0.25, 0.3), mats.red); S.anchor.add(hubA);
     const crutch = M(new THREE.BoxGeometry(0.1, 1.2, 0.1), mats.steel); crutch.position.set(0, -0.6, -0.4); S.anchor.add(crutch);
@@ -73,7 +76,7 @@ export default {
   update(k) {
     S.wheel.rotation.z = k.w; S.anchor.rotation.z = k.phi; S.pend.rotation.z = k.phi;
     const wy = -0.6 + k.w * DR; // weight descends as wheel turns clockwise
-    setRod(S.cord, [1.35, WC[1], -0.35], [1.35, wy + 0.55, -0.35]);
-    S.wt.position.set(1.35, wy, -0.35);
+    setRod(S.cord, [0.9, WC[1], -0.35], [0.9, wy + 0.55, -0.35]);
+    S.wt.position.set(0.9, wy, -0.35);
   },
 };
